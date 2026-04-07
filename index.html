@@ -358,7 +358,7 @@ async function loadFromSheet() {
 async function fetchRates() {
   const btn = document.querySelector('.btn.refresh');
   try {
-    const res = await fetch('https://api.frankfurter.app/latest?base=EUR&symbols=MXN,USD,COP');
+    const res = await fetch('https://open.er-api.com/v6/latest/EUR');
     if (!res.ok) throw new Error();
     const data = await res.json();
     rates.MXN = 1 / data.rates.MXN;
@@ -658,6 +658,7 @@ function render(){
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
+render();
 fetchRates();
 loadFromSheet();
 </script>
