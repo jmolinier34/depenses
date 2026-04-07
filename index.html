@@ -6,7 +6,7 @@
 <title>Dépenses Tracker</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
-  :root { --bg:#f5f3ef;--surface:#faf9f7;--border:#e8e5e0;--text:#1a1917;--muted:#8a8680;--accent:#3d3b38;--tag-bg:#eeece8;--green:#27ae60;--red:#c0392b; }
+  :root{--bg:#f5f3ef;--surface:#faf9f7;--border:#e8e5e0;--text:#1a1917;--muted:#8a8680;--accent:#3d3b38;--tag-bg:#eeece8;--green:#27ae60;--red:#c0392b;}
   *{margin:0;padding:0;box-sizing:border-box;}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;}
   .shell{display:flex;min-height:100vh;}
@@ -30,8 +30,7 @@
   .btn:hover{background:var(--tag-bg);}
   .btn.primary{background:var(--text);color:white;border-color:var(--text);}
   .btn.primary:hover{background:#3d3b38;}
-  .btn.refresh{background:var(--tag-bg);border-color:var(--border);font-size:11px;padding:6px 12px;}
-  .btn.refresh:hover{background:var(--border);}
+  .btn.sm{font-size:11px;padding:6px 12px;background:var(--tag-bg);}
   .rate-badge{font-size:11px;color:var(--muted);background:var(--tag-bg);border:1px solid var(--border);padding:5px 10px;border-radius:4px;}
   .content{padding:24px 28px;}
   .stats-row{display:flex;gap:14px;margin-bottom:24px;flex-wrap:wrap;}
@@ -85,7 +84,6 @@
   .trend-table th{text-align:left;padding:5px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:1px solid var(--border);font-weight:400;}
   .trend-table td{padding:7px 8px;border-bottom:1px solid var(--border);}
   .trend-table tr:last-child td{border-bottom:none;}
-  .budget-section-title{font-family:'DM Serif Display',serif;font-size:16px;font-weight:400;margin:0 0 12px;}
   .budget-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;}
   .budget-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
   .budget-card-header{padding:14px 18px 10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
@@ -139,21 +137,19 @@
     <div class="nav-item" onclick="filterCat('Finances')">🏦 Finances</div>
     <div class="nav-item" onclick="filterCat('Divers')">🌐 Divers</div>
   </nav>
-
   <div class="main">
     <div class="topbar">
       <span class="topbar-title" id="topbar-title">Saisie & suivi</span>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
         <span class="rate-badge" id="rate-status">Taux : défaut</span>
-        <button class="btn refresh" onclick="fetchRates()">↻ Taux</button>
-        <button class="btn refresh" onclick="loadFromSheet()">↻ Sync</button>
+        <button class="btn sm" onclick="fetchRates()">↻ Taux</button>
+        <button class="btn sm" onclick="loadData()">↻ Sync</button>
         <select class="btn" id="year-select" onchange="render()" style="padding:7px 10px">
           <option>2026</option><option>2025</option>
         </select>
         <button class="btn primary" onclick="openModal()">+ Ajouter</button>
       </div>
     </div>
-
     <div id="view-entries" class="content">
       <div class="stats-row" id="stats-row"></div>
       <div class="month-bar" id="month-bar"></div>
@@ -165,11 +161,10 @@
         <div id="table-body"></div>
       </div>
     </div>
-
     <div id="view-dashboard" class="content" style="display:none">
       <div class="stats-row" id="dash-stats"></div>
       <div class="dash-grid">
-        <div class="dash-card"><h3>Par catégorie — mois courant</h3><div id="dash-cats"></div></div>
+        <div class="dash-card"><h3>Par catégorie</h3><div id="dash-cats"></div></div>
         <div class="dash-card"><h3>Par compte</h3><div class="account-summary" id="dash-accounts"></div></div>
         <div class="dash-card"><h3>Par devise</h3><div class="currency-grid" id="dash-currencies"></div></div>
         <div class="dash-card"><h3>Tendance 6 mois</h3>
@@ -178,7 +173,6 @@
         </div>
       </div>
     </div>
-
     <div id="view-budget" class="content" style="display:none">
       <div class="stats-row" id="budget-stats"></div>
       <div class="budget-summary-bar">
@@ -186,8 +180,8 @@
         <div id="bsb-rows"></div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <span class="budget-section-title" style="margin:0">Détail par catégorie</span>
-        <button class="btn" onclick="openBudgetModal()" style="font-size:11px">✏️ Modifier les budgets</button>
+        <span style="font-family:'DM Serif Display',serif;font-size:16px">Détail par catégorie</span>
+        <button class="btn sm" onclick="openBudgetModal()">✏️ Modifier les budgets</button>
       </div>
       <div class="budget-grid" id="budget-detail"></div>
     </div>
@@ -271,7 +265,7 @@
 <div class="modal-bg" id="budget-modal-bg">
   <div class="modal" style="width:540px">
     <h2>Budgets mensuels (EUR)</h2>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:18px">Définissez un budget mensuel par sous-catégorie. Laissez à 0 pour ignorer.</p>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:18px">Définissez un budget mensuel par sous-catégorie.</p>
     <div id="budget-form-rows"></div>
     <div class="modal-actions">
       <button class="btn" onclick="closeBudgetModal()">Annuler</button>
@@ -283,8 +277,27 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ── CONFIG ────────────────────────────────────────────────────────────────────
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysUXoEwSSSQ6iylGuKQCu-NLtkg3GpsZjQDDbr09F6Afb-jaHjcRjthd_EU5N0dXuw/exec";
+// ── SUPABASE CONFIG ───────────────────────────────────────────────────────────
+const SUPA_URL = 'https://jvbfzexuwwfwovsxmbtd.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2YmZ6ZXh1d3dmd292c3htYnRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTk3MDksImV4cCI6MjA5MTE3NTcwOX0.nPADYmx6aYbuA4eXDblbTk2G_zOThWuDQxq8WSQ4DKA';
+const HEADERS = {'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY};
+
+async function sbGet(table, params='') {
+  const res = await fetch(`${SUPA_URL}/rest/v1/${table}?${params}`, {headers:{...HEADERS,'Prefer':'return=representation'}});
+  return res.json();
+}
+async function sbInsert(table, data) {
+  const res = await fetch(`${SUPA_URL}/rest/v1/${table}`, {method:'POST',headers:{...HEADERS,'Prefer':'return=representation'},body:JSON.stringify(data)});
+  return res.json();
+}
+async function sbDelete(table, id) {
+  const res = await fetch(`${SUPA_URL}/rest/v1/${table}?id=eq.${id}`, {method:'DELETE',headers:HEADERS});
+  return res.ok;
+}
+async function sbUpsert(table, data) {
+  const res = await fetch(`${SUPA_URL}/rest/v1/${table}`, {method:'POST',headers:{...HEADERS,'Prefer':'resolution=merge-duplicates,return=representation'},body:JSON.stringify(data)});
+  return res.json();
+}
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let entries = [];
@@ -293,132 +306,102 @@ let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 let currentView = 'entries';
 let filterCategory = '';
-const DEFAULT_RATES = { EUR:1, MXN:0.0481, USD:0.926, COP:0.000226 };
-let rates = { ...DEFAULT_RATES };
+const DEFAULT_RATES = {EUR:1,MXN:0.0481,USD:0.926,COP:0.000226};
+let rates = {...DEFAULT_RATES};
 const MONTHS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
 
-// ── TOAST ─────────────────────────────────────────────────────────────────────
-function toast(msg, duration=2500) {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), duration);
+function toast(msg, d=2500) {
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),d);
 }
-
-// ── SYNC STATUS ───────────────────────────────────────────────────────────────
 function setSyncStatus(state, msg) {
-  const el = document.getElementById('sync-status');
-  const cls = state === 'ok' ? 'ok' : state === 'err' ? 'err' : 'loading';
-  el.innerHTML = `<span class="sync-dot ${cls}"></span>${msg}`;
+  const cls=state==='ok'?'ok':state==='err'?'err':'loading';
+  document.getElementById('sync-status').innerHTML=`<span class="sync-dot ${cls}"></span>${msg}`;
 }
 
-// ── GOOGLE SHEETS API ─────────────────────────────────────────────────────────
-async function apiGet(action) {
-  const url = `${SCRIPT_URL}?action=${action}`;
-  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-  const res = await fetch(proxy);
-  const data = await res.json();
-  return JSON.parse(data.contents);
-}
-
-async function apiPost(body) {
-  // For POST we use no-cors mode via a GET with encoded body
-  const url = `${SCRIPT_URL}?action=${body.action}&data=${encodeURIComponent(JSON.stringify(body))}`;
-  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-  const res = await fetch(proxy);
-  const data = await res.json();
-  return JSON.parse(data.contents);
-}
-
-async function loadFromSheet() {
-  setSyncStatus('loading', 'Sync…');
+// ── LOAD DATA ─────────────────────────────────────────────────────────────────
+async function loadData() {
+  setSyncStatus('loading','Sync…');
   try {
-    const [entData, budData] = await Promise.all([
-      apiGet('getAll'),
-      apiGet('getBudgets')
+    const [depData, budData] = await Promise.all([
+      sbGet('depenses','order=created_at.asc'),
+      sbGet('budgets','select=categorie,montant')
     ]);
-    if (entData.entries) {
-      entries = entData.entries.map(e => ({
-        id: e.id,
-        date: e.date,
-        desc: e.description,
-        cat: e.categorie,
-        account: e.compte,
-        amount: parseFloat(e.montant),
-        currency: e.devise,
-        rate: parseFloat(e.taux_eur),
-        montant_eur: parseFloat(e.montant_eur)
-      }));
-    }
-    if (budData.budgets) budgets = budData.budgets;
-    setSyncStatus('ok', 'Synchronisé');
+    entries = (depData||[]).map(e=>({
+      id:e.id, date:e.date, desc:e.description, cat:e.categorie,
+      account:e.compte, amount:parseFloat(e.montant), currency:e.devise,
+      rate:parseFloat(e.taux_eur), montant_eur:parseFloat(e.montant_eur)
+    }));
+    budgets = {};
+    (budData||[]).forEach(b=>{ budgets[b.categorie]=parseFloat(b.montant); });
+    setSyncStatus('ok','Synchronisé');
     render();
   } catch(e) {
-    setSyncStatus('err', 'Erreur sync');
-    toast('⚠️ Impossible de contacter Google Sheets');
+    setSyncStatus('err','Erreur sync');
+    toast('⚠️ Impossible de contacter la base de données');
   }
 }
 
 // ── RATES ─────────────────────────────────────────────────────────────────────
 async function fetchRates() {
-  const btn = document.querySelector('.btn.refresh');
   try {
     const res = await fetch('https://open.er-api.com/v6/latest/EUR');
-    if (!res.ok) throw new Error();
+    if(!res.ok) throw new Error();
     const data = await res.json();
-    rates.MXN = 1 / data.rates.MXN;
-    rates.USD = 1 / data.rates.USD;
-    rates.COP = 1 / data.rates.COP;
-    const t = new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
-    document.getElementById('rate-status').textContent = `Taux ${t}`;
-    document.getElementById('rate-status').style.color = 'var(--green)';
+    rates.MXN = 1/data.rates.MXN;
+    rates.USD = 1/data.rates.USD;
+    rates.COP = 1/data.rates.COP;
+    const t = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('rate-status').textContent=`Taux ${t}`;
+    document.getElementById('rate-status').style.color='var(--green)';
     updateCurrencyHint();
   } catch(e) {
-    document.getElementById('rate-status').textContent = 'Taux : erreur';
-    document.getElementById('rate-status').style.color = 'var(--red)';
+    document.getElementById('rate-status').textContent='Taux : défaut';
   }
 }
 
-function toEur(amount, currency, rate) {
-  if (currency === 'EUR') return amount;
-  const r = rate || rates[currency] || DEFAULT_RATES[currency] || 1;
-  return amount * r;
+function toEur(amount,currency,rate){
+  if(currency==='EUR') return amount;
+  return amount*(rate||rates[currency]||DEFAULT_RATES[currency]||1);
 }
-function fmtLocal(amount, currency) {
-  const sym = {MXN:'MX$',EUR:'€',COP:'COP$',USD:'$'};
+function fmtLocal(amount,currency){
+  const sym={MXN:'MX$',EUR:'€',COP:'COP$',USD:'$'};
   return (sym[currency]||'')+' '+amount.toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:0});
 }
-function fmtEur(amount) { return amount.toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:0})+' €'; }
-
-function updateCurrencyHint() {
-  const cur = document.getElementById('f-currency').value;
-  const r = rates[cur] || DEFAULT_RATES[cur];
-  document.getElementById('f-rate').value = r ? r.toFixed(6) : '';
-  const labels = {MXN:`1 MXN = ${(rates.MXN||DEFAULT_RATES.MXN).toFixed(4)} EUR`,USD:`1 USD = ${(rates.USD||DEFAULT_RATES.USD).toFixed(4)} EUR`,COP:`1 COP = ${(rates.COP||DEFAULT_RATES.COP).toFixed(6)} EUR`,EUR:'—'};
-  document.getElementById('rate-hint2').textContent = labels[cur];
+function fmtEur(amount){
+  return amount.toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:0})+' €';
+}
+function updateCurrencyHint(){
+  const cur=document.getElementById('f-currency').value;
+  const r=rates[cur]||DEFAULT_RATES[cur];
+  document.getElementById('f-rate').value=r?r.toFixed(6):'';
+  const labels={MXN:`1 MXN = ${(rates.MXN||DEFAULT_RATES.MXN).toFixed(4)} EUR`,USD:`1 USD = ${(rates.USD||DEFAULT_RATES.USD).toFixed(4)} EUR`,COP:`1 COP = ${(rates.COP||DEFAULT_RATES.COP).toFixed(6)} EUR`,EUR:'—'};
+  document.getElementById('rate-hint2').textContent=labels[cur];
 }
 
-// ── CATEGORY SETUP ────────────────────────────────────────────────────────────
-const CAT_GROUPS = {
+// ── CATEGORIES ────────────────────────────────────────────────────────────────
+const CAT_GROUPS={
   'Logement':['Loyer','Charges (eau, électricité, internet)','Entretien & réparations','Assurance habitation','Femme de ménage'],
   'Vie quotidienne':['Alimentation (courses)','Restaurants & sorties'],
   'Transport':['Carburant','Taxi / Uber / Transport','Entretien véhicule & assurance auto','Voyages & déplacements'],
   'Santé':['Médecin, pharmacie, mutuelles','Sport & fitness','Soins personnels'],
   'Personnel':['Vêtements & achats personnels','Abonnements (Netflix, Spotify…)','Loisirs & culture','Club'],
   'Famille':['Scolarité / éducation','Dons / soutien famille','Cadeaux'],
-  'Finances':['Frais bancaires & commissions','Frais Equance / SCPI','Intérêts d\'emprunt','Impôts & taxes'],
+  'Finances':['Frais bancaires & commissions','Frais Equance / SCPI',"Intérêts d'emprunt",'Impôts & taxes'],
   'Divers':['Frais administratifs','Dépenses imprévues / exceptionnelles']
 };
-const CAT_ICONS = {'Logement':'🏠','Vie quotidienne':'🍽️','Transport':'🚗','Santé':'💊','Personnel':'👕','Famille':'👨‍👩‍👧','Finances':'🏦','Divers':'🌐'};
-function getCatGroup(cat) {
+const CAT_ICONS={'Logement':'🏠','Vie quotidienne':'🍽️','Transport':'🚗','Santé':'💊','Personnel':'👕','Famille':'👨‍👩‍👧','Finances':'🏦','Divers':'🌐'};
+function getCatGroup(cat){
   for(const [g,cats] of Object.entries(CAT_GROUPS)) if(cats.includes(cat)) return g;
   return 'Divers';
 }
 
 // ── MONTH DATA ────────────────────────────────────────────────────────────────
-function getMonthEntries(month, year) {
-  return entries.filter(e => { const d=new Date(e.date); return d.getMonth()===month && d.getFullYear()===year; });
+function getMonthEntries(month,year){
+  return entries.filter(e=>{const d=new Date(e.date);return d.getMonth()===month&&d.getFullYear()===year;});
 }
-function get6MonthAvg(cat) {
+function get6MonthAvg(cat){
   let total=0,months=0;
   for(let i=0;i<6;i++){
     let m=currentMonth-i,y=currentYear;
@@ -429,15 +412,14 @@ function get6MonthAvg(cat) {
   return months?total/months:null;
 }
 
-// ── MONTH BAR ─────────────────────────────────────────────────────────────────
-function renderMonthBar() {
-  document.getElementById('month-bar').innerHTML = MONTHS.map((m,i)=>
+// ── RENDER HELPERS ────────────────────────────────────────────────────────────
+function renderMonthBar(){
+  document.getElementById('month-bar').innerHTML=MONTHS.map((m,i)=>
     `<div class="month-pill ${i===currentMonth?'active':''}" onclick="setMonth(${i})">${m}</div>`).join('');
 }
 function setMonth(m){currentMonth=m;render();}
 
-// ── STATS ─────────────────────────────────────────────────────────────────────
-function renderStats() {
+function renderStats(){
   const me=getMonthEntries(currentMonth,currentYear);
   const total=me.reduce((s,e)=>s+toEur(e.amount,e.currency,e.rate),0);
   let pm=currentMonth-1,py=currentYear; if(pm<0){pm=11;py--;}
@@ -445,47 +427,43 @@ function renderStats() {
   const change=prevTotal?((total-prevTotal)/prevTotal*100):null;
   const changeStr=change!==null?`<span class="${change>0?'trend-up':'trend-down'}">${change>0?'+':''}${change.toFixed(0)}% vs mois précédent</span>`:'';
   const cats=[...new Set(me.map(e=>getCatGroup(e.cat)))].length;
+  let avg6=0,n=0;
+  for(let i=0;i<6;i++){let m2=currentMonth-i,y2=currentYear;if(m2<0){m2+=12;y2--;}const me2=getMonthEntries(m2,y2);if(me2.length){avg6+=me2.reduce((s,e)=>s+toEur(e.amount,e.currency,e.rate),0);n++;}}
   document.getElementById('stats-row').innerHTML=`
     <div class="stat-card"><div class="stat-label">Total ${MONTHS[currentMonth]}</div><div class="stat-value">${fmtEur(total)}</div><div class="stat-sub">${changeStr||me.length+' dépenses'}</div></div>
     <div class="stat-card"><div class="stat-label">Nombre d'entrées</div><div class="stat-value">${me.length}</div><div class="stat-sub">${cats} catégorie${cats!==1?'s':''}</div></div>
-    <div class="stat-card"><div class="stat-label">Moy. 6 mois</div><div class="stat-value">${fmtEur(()=>{let t=0,n=0;for(let i=0;i<6;i++){let m2=currentMonth-i,y2=currentYear;if(m2<0){m2+=12;y2--;}const me2=getMonthEntries(m2,y2);if(me2.length){t+=me2.reduce((s,e)=>s+toEur(e.amount,e.currency,e.rate),0);n++;}}return n?t/n:0;})()}</div><div class="stat-sub">base 6 mois glissants</div></div>`;
+    <div class="stat-card"><div class="stat-label">Moy. 6 mois</div><div class="stat-value">${fmtEur(n?avg6/n:0)}</div><div class="stat-sub">base 6 mois glissants</div></div>`;
 }
 
-// ── TABLE ─────────────────────────────────────────────────────────────────────
-function renderTable() {
+function renderTable(){
   let me=getMonthEntries(currentMonth,currentYear);
   if(filterCategory) me=me.filter(e=>getCatGroup(e.cat)===filterCategory);
   me.sort((a,b)=>new Date(b.date)-new Date(a.date));
   const body=document.getElementById('table-body');
-  if(!me.length){
-    body.innerHTML=`<div class="empty"><span>📭</span>Aucune dépense pour ${MONTHS[currentMonth]} ${currentYear}${filterCategory?' — '+filterCategory:''}.<br><br><small>Cliquez sur <b>+ Ajouter</b> pour commencer.</small></div>`;
-    return;
-  }
+  if(!me.length){body.innerHTML=`<div class="empty"><span>📭</span>Aucune dépense pour ${MONTHS[currentMonth]} ${currentYear}${filterCategory?' — '+filterCategory:''}.<br><br><small>Cliquez sur <b>+ Ajouter</b> pour commencer.</small></div>`;return;}
   body.innerHTML=me.map(e=>{
     const eur=toEur(e.amount,e.currency,e.rate);
     const avg=get6MonthAvg(e.cat);
-    const avgStr=avg?fmtEur(avg):'—';
     const trend=avg?(eur>avg*1.1?'<span class="trend-up">↑</span>':eur<avg*0.9?'<span class="trend-down">↓</span>':''):'';
     return `<div class="table-row">
-      <span class="date">${new Date(e.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})}</span>
+      <span style="color:var(--muted);font-size:12px">${new Date(e.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})}</span>
       <span>${e.desc}</span>
       <span><span class="tag">${CAT_ICONS[getCatGroup(e.cat)]||''} ${e.cat}</span></span>
       <span><span class="account-tag">${e.account}</span></span>
       <span style="font-weight:500">${fmtLocal(e.amount,e.currency)}</span>
       <span style="color:var(--muted);font-size:12px">${e.currency!=='EUR'?fmtEur(eur):'—'}</span>
-      <span style="color:var(--muted);font-size:12px">${avgStr} ${trend}</span>
+      <span style="color:var(--muted);font-size:12px">${avg?fmtEur(avg):'—'} ${trend}</span>
       <span><button class="del-btn" onclick="deleteEntry('${e.id}')">✕</button></span>
     </div>`;
   }).join('');
 }
 
-// ── DASHBOARD ─────────────────────────────────────────────────────────────────
-function renderDashboard() {
+function renderDashboard(){
   const me=getMonthEntries(currentMonth,currentYear);
   const total=me.reduce((s,e)=>s+toEur(e.amount,e.currency,e.rate),0);
   document.getElementById('dash-stats').innerHTML=`
-    <div class="stat-card"><div class="stat-label">Total ${MONTHS[currentMonth]} EUR</div><div class="stat-value">${fmtEur(total)}</div></div>
-    <div class="stat-card"><div class="stat-label">Entrées ce mois</div><div class="stat-value">${me.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Total ${MONTHS[currentMonth]}</div><div class="stat-value">${fmtEur(total)}</div></div>
+    <div class="stat-card"><div class="stat-label">Entrées</div><div class="stat-value">${me.length}</div></div>
     <div class="stat-card"><div class="stat-label">Dépense max</div><div class="stat-value">${me.length?fmtEur(Math.max(...me.map(e=>toEur(e.amount,e.currency,e.rate)))):'—'}</div></div>`;
   const byGroup={};
   me.forEach(e=>{const g=getCatGroup(e.cat);byGroup[g]=(byGroup[g]||0)+toEur(e.amount,e.currency,e.rate);});
@@ -508,12 +486,11 @@ function renderDashboard() {
     const prev=i>0?rows[i-1].total:null;
     const chg=prev&&prev>0?((r.total-prev)/prev*100):null;
     const chgStr=chg!==null&&r.total>0?`<span class="${chg>0?'trend-up':'trend-down'}">${chg>0?'+':''}${chg.toFixed(0)}%</span>`:'';
-    return `<tr><td>${r.label}</td><td>${r.total>0?fmtEur(r.total):'<span style="color:var(--muted)">—</span>'}</td><td>${chgStr}</td></tr>`;
+    return `<tr><td>${r.label}</td><td>${r.total>0?fmtEur(r.total):'—'}</td><td>${chgStr}</td></tr>`;
   }).join('');
 }
 
-// ── BUDGET VIEW ───────────────────────────────────────────────────────────────
-function renderBudget() {
+function renderBudget(){
   const me=getMonthEntries(currentMonth,currentYear);
   const actualByCat={};
   me.forEach(e=>{actualByCat[e.cat]=(actualByCat[e.cat]||0)+toEur(e.amount,e.currency,e.rate);});
@@ -523,46 +500,34 @@ function renderBudget() {
   const budgetedCats=Object.entries(CAT_GROUPS).filter(([,cats])=>cats.some(c=>budgets[c]>0));
   document.getElementById('budget-stats').innerHTML=`
     <div class="stat-card"><div class="stat-label">Budget total ${MONTHS[currentMonth]}</div><div class="stat-value">${fmtEur(totalBudget)}</div><div class="stat-sub">${budgetedCats.length} groupes budgétés</div></div>
-    <div class="stat-card"><div class="stat-label">Réel ${MONTHS[currentMonth]}</div><div class="stat-value" style="color:${totalActual>totalBudget&&totalBudget>0?'var(--red)':'var(--text)'}">${fmtEur(totalActual)}</div><div class="stat-sub">${totalBudget>0?(totalActual>totalBudget?'<span class="trend-up">Dépassement de '+fmtEur(totalActual-totalBudget)+'</span>':'<span class="trend-down">'+fmtEur(totalBudget-totalActual)+' restants</span>'):''}</div></div>
-    <div class="stat-card"><div class="stat-label">Taux de consommation</div><div class="stat-value">${totalBudget>0?Math.round(totalActual/totalBudget*100)+'%':'—'}</div><div class="stat-sub">du budget total</div></div>`;
-  const bsbRows=Object.entries(CAT_GROUPS).map(([group,cats])=>{
-    const gBudget=cats.reduce((s,c)=>s+(parseFloat(budgets[c])||0),0);
-    const gActual=cats.reduce((s,c)=>s+(actualByCat[c]||0),0);
-    if(gBudget===0&&gActual===0) return '';
-    const cls=gBudget===0?'ok':gActual>gBudget?'over':gActual>gBudget*0.8?'warn':'ok';
-    return `<div class="bsb-row">
-      <span class="bsb-label">${CAT_ICONS[group]||''} ${group}</span>
-      <div class="bsb-bar-wrap"><div class="bsb-bar ${cls}" style="width:${gActual>0?(gBudget>0?Math.min(gActual/gBudget*100,100):50):0}%"></div></div>
-      <span class="bsb-amounts">${fmtEur(gActual)} / ${gBudget>0?fmtEur(gBudget):'non défini'}</span>
-    </div>`;
-  }).join('');
-  document.getElementById('bsb-rows').innerHTML=bsbRows||'<span style="color:var(--muted);font-size:12px">Aucun budget défini.</span>';
+    <div class="stat-card"><div class="stat-label">Réel ${MONTHS[currentMonth]}</div><div class="stat-value" style="color:${totalActual>totalBudget&&totalBudget>0?'var(--red)':'var(--text)'}">${fmtEur(totalActual)}</div><div class="stat-sub">${totalBudget>0?(totalActual>totalBudget?'<span class="trend-up">Dépassement '+fmtEur(totalActual-totalBudget)+'</span>':'<span class="trend-down">'+fmtEur(totalBudget-totalActual)+' restants</span>'):''}</div></div>
+    <div class="stat-card"><div class="stat-label">Consommation</div><div class="stat-value">${totalBudget>0?Math.round(totalActual/totalBudget*100)+'%':'—'}</div></div>`;
+  document.getElementById('bsb-rows').innerHTML=Object.entries(CAT_GROUPS).map(([group,cats])=>{
+    const gB=cats.reduce((s,c)=>s+(parseFloat(budgets[c])||0),0);
+    const gA=cats.reduce((s,c)=>s+(actualByCat[c]||0),0);
+    if(gB===0&&gA===0) return '';
+    const cls=gB===0?'ok':gA>gB?'over':gA>gB*0.8?'warn':'ok';
+    return `<div class="bsb-row"><span class="bsb-label">${CAT_ICONS[group]||''} ${group}</span>
+      <div class="bsb-bar-wrap"><div class="bsb-bar ${cls}" style="width:${gA>0?(gB>0?Math.min(gA/gB*100,100):50):0}%"></div></div>
+      <span class="bsb-amounts">${fmtEur(gA)} / ${gB>0?fmtEur(gB):'non défini'}</span></div>`;
+  }).join('')||'<span style="color:var(--muted);font-size:12px">Aucun budget défini.</span>';
   document.getElementById('budget-detail').innerHTML=Object.entries(CAT_GROUPS).map(([group,cats])=>{
-    const gBudget=cats.reduce((s,c)=>s+(parseFloat(budgets[c])||0),0);
-    const gActual=cats.reduce((s,c)=>s+(actualByCat[c]||0),0);
+    const gB=cats.reduce((s,c)=>s+(parseFloat(budgets[c])||0),0);
+    const gA=cats.reduce((s,c)=>s+(actualByCat[c]||0),0);
     const lines=cats.map(cat=>{
-      const b=parseFloat(budgets[cat])||0;
-      const a=actualByCat[cat]||0;
+      const b=parseFloat(budgets[cat])||0,a=actualByCat[cat]||0;
       if(b===0&&a===0) return '';
       const badge=b===0?(a>0?`<span class="badge-warn">non budg.</span>`:''):a>b?`<span class="badge-over">+${fmtEur(a-b)}</span>`:a>b*0.8?`<span class="badge-warn">${Math.round(a/b*100)}%</span>`:`<span class="badge-ok">${Math.round(a/b*100)}%</span>`;
-      return `<div class="budget-line">
-        <span>${cat}</span>
-        <span style="text-align:right;color:var(--muted)">${b>0?fmtEur(b):'—'}</span>
-        <span style="text-align:right;font-weight:${a>0?'500':'400'}">${a>0?fmtEur(a):'—'}</span>
-        <span style="text-align:right" class="${a>b&&b>0?'trend-up':''}">${b>0?fmtEur(a-b):''}</span>
-        <span>${badge}</span>
-      </div>`;
+      return `<div class="budget-line"><span>${cat}</span><span style="text-align:right;color:var(--muted)">${b>0?fmtEur(b):'—'}</span><span style="text-align:right;font-weight:${a>0?500:400}">${a>0?fmtEur(a):'—'}</span><span style="text-align:right" class="${a>b&&b>0?'trend-up':''}">${b>0?fmtEur(a-b):''}</span><span>${badge}</span></div>`;
     }).filter(Boolean).join('');
     if(!lines) return '';
-    return `<div class="budget-card">
-      <div class="budget-card-header"><span class="bch-label">${CAT_ICONS[group]||''} ${group}</span><span class="bch-total">${fmtEur(gActual)} / ${gBudget>0?fmtEur(gBudget):'—'}</span></div>
-      <div class="budget-line header"><span>Sous-catégorie</span><span style="text-align:right">Budget</span><span style="text-align:right">Réel</span><span style="text-align:right">Écart</span><span></span></div>
-      ${lines}</div>`;
-  }).filter(Boolean).join('')||`<div style="grid-column:1/-1"><div class="empty"><span>🎯</span>Aucun budget défini.<br><br><small>Cliquez sur <b>Modifier les budgets</b> pour commencer.</small></div></div>`;
+    return `<div class="budget-card"><div class="budget-card-header"><span class="bch-label">${CAT_ICONS[group]||''} ${group}</span><span class="bch-total">${fmtEur(gA)} / ${gB>0?fmtEur(gB):'—'}</span></div>
+      <div class="budget-line header"><span>Sous-catégorie</span><span style="text-align:right">Budget</span><span style="text-align:right">Réel</span><span style="text-align:right">Écart</span><span></span></div>${lines}</div>`;
+  }).filter(Boolean).join('')||`<div style="grid-column:1/-1"><div class="empty"><span>🎯</span>Aucun budget défini.</div></div>`;
 }
 
 // ── BUDGET MODAL ──────────────────────────────────────────────────────────────
-function openBudgetModal() {
+function openBudgetModal(){
   document.getElementById('budget-form-rows').innerHTML=Object.entries(CAT_GROUPS).map(([group,cats])=>`
     <div style="margin-bottom:16px">
       <div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border)">${CAT_ICONS[group]||''} ${group}</div>
@@ -576,7 +541,7 @@ function openBudgetModal() {
   document.getElementById('budget-modal-bg').classList.add('open');
 }
 function closeBudgetModal(){document.getElementById('budget-modal-bg').classList.remove('open');}
-async function saveBudgets() {
+async function saveBudgets(){
   const newBudgets={};
   document.querySelectorAll('#budget-form-rows input[data-cat]').forEach(inp=>{
     const v=parseFloat(inp.value)||0;
@@ -584,11 +549,15 @@ async function saveBudgets() {
   });
   budgets=newBudgets;
   closeBudgetModal();
-  toast('💾 Sauvegarde des budgets…');
+  toast('💾 Sauvegarde…');
   try {
-    await apiPost({action:'saveBudgets',budgets});
+    // Delete all then reinsert
+    await fetch(`${SUPA_URL}/rest/v1/budgets?categorie=neq.null`,{method:'DELETE',headers:HEADERS});
+    if(Object.keys(budgets).length>0){
+      await sbUpsert('budgets', Object.entries(budgets).map(([categorie,montant])=>({categorie,montant})));
+    }
     toast('✅ Budgets synchronisés');
-  } catch(e) { toast('⚠️ Erreur de sauvegarde'); }
+  } catch(e){toast('⚠️ Erreur sauvegarde');}
   render();
 }
 
@@ -602,7 +571,7 @@ function closeModal(){document.getElementById('modal-bg').classList.remove('open
 document.getElementById('modal-bg').addEventListener('click',function(e){if(e.target===this)closeModal();});
 document.getElementById('budget-modal-bg').addEventListener('click',function(e){if(e.target===this)closeBudgetModal();});
 
-async function addEntry() {
+async function addEntry(){
   const date=document.getElementById('f-date').value;
   const currency=document.getElementById('f-currency').value;
   const amount=parseFloat(document.getElementById('f-amount').value);
@@ -613,34 +582,31 @@ async function addEntry() {
   if(!date||!amount||!desc){alert('Merci de remplir la date, le montant et la description.');return;}
   const montant_eur=toEur(amount,currency,rate);
   const btn=document.getElementById('save-btn');
-  btn.innerHTML='<span class="spinner"></span>Envoi…'; btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span>Envoi…';btn.disabled=true;
   try {
-    const res=await apiPost({action:'addEntry',entry:{date,description:desc,categorie:cat,compte:account,montant:amount,devise:currency,taux_eur:rate,montant_eur}});
-    if(res.success){
-      entries.push({id:res.id,date,desc,cat,account,amount,currency,rate,montant_eur});
+    const res=await sbInsert('depenses',{date,description:desc,categorie:cat,compte:account,montant:amount,devise:currency,taux_eur:rate,montant_eur});
+    if(res&&res[0]){
+      entries.push({id:res[0].id,date,desc,cat,account,amount,currency,rate,montant_eur});
       toast('✅ Dépense enregistrée');
       closeModal();
       document.getElementById('f-amount').value='';
       document.getElementById('f-desc').value='';
       render();
     }
-  } catch(e){ toast('⚠️ Erreur — vérifier la connexion'); }
-  btn.innerHTML='Enregistrer'; btn.disabled=false;
+  } catch(e){toast('⚠️ Erreur — vérifier la connexion');}
+  btn.innerHTML='Enregistrer';btn.disabled=false;
 }
 
 async function deleteEntry(id){
   if(!confirm('Supprimer cette dépense ?')) return;
   entries=entries.filter(e=>e.id!==id);
   render();
-  try {
-    await apiPost({action:'deleteEntry',id});
-    toast('🗑️ Dépense supprimée');
-  } catch(e){ toast('⚠️ Erreur de suppression'); await loadFromSheet(); }
+  try{await sbDelete('depenses',id);toast('🗑️ Supprimé');}
+  catch(e){toast('⚠️ Erreur suppression');await loadData();}
 }
 
 function filterCat(cat){filterCategory=cat;switchView('entries');}
 
-// ── VIEWS ─────────────────────────────────────────────────────────────────────
 function switchView(v){
   currentView=v;
   ['entries','dashboard','budget'].forEach(id=>{
@@ -661,10 +627,9 @@ function render(){
   else if(currentView==='budget'){renderBudget();}
 }
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
 render();
 fetchRates();
-loadFromSheet();
+loadData();
 </script>
 </body>
 </html>
