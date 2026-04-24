@@ -47,6 +47,34 @@
   .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
   .table-header{display:grid;grid-template-columns:100px 1fr 140px 110px 100px 90px 80px 80px;padding:10px 16px;background:var(--tag-bg);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:1px solid var(--border);gap:8px;}
   .table-row{display:grid;grid-template-columns:100px 1fr 140px 110px 100px 90px 80px 80px;padding:10px 16px;border-bottom:1px solid var(--border);gap:8px;align-items:center;transition:background .1s;}
+  @media(max-width:768px){
+    .shell{flex-direction:column;}
+    .sidebar{width:100%;min-width:unset;flex-direction:row;flex-wrap:wrap;padding:12px;gap:4px;border-right:none;border-bottom:1px solid var(--border);}
+    .logo{padding:0 0 8px;border-bottom:none;margin-bottom:0;width:100%;border-bottom:1px solid var(--border);margin-bottom:8px;}
+    .nav-section{display:none;}
+    .nav-item{padding:6px 10px;font-size:11px;border-left:none;border-radius:20px;border:1px solid var(--border);}
+    .nav-item.active{background:var(--text);color:white;border-color:var(--text);}
+    .content{padding:14px;}
+    .topbar{padding:10px 14px;gap:8px;}
+    .topbar-title{font-size:16px;}
+    .stats-row{gap:8px;}
+    .stat-card{min-width:calc(50% - 4px);padding:12px;}
+    .stat-value{font-size:18px;}
+    .table-header{display:none;}
+    .table-row{grid-template-columns:1fr;padding:12px 14px;gap:4px;}
+    .table-row>span:nth-child(3){order:-1;}
+    .table-row>span:nth-child(6){display:none;}
+    .table-row>span:nth-child(7){display:none;}
+    .table-row .date-cell{font-size:11px;color:var(--muted);}
+    .mobile-row{display:flex;justify-content:space-between;align-items:center;width:100%;}
+    .dash-grid{grid-template-columns:1fr;}
+    .budget-grid{grid-template-columns:1fr;}
+    .form-row-2{grid-template-columns:1fr;}
+    .modal{padding:20px;}
+    .bsb-row{flex-wrap:wrap;}
+    .bsb-amounts{width:100%;text-align:left;}
+    .budget-line{grid-template-columns:1fr 70px 70px 60px 60px;font-size:11px;padding:7px 12px;}
+  }
   .table-row:last-child{border-bottom:none;}
   .table-row:hover{background:var(--bg);}
   .tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;background:var(--tag-bg);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
@@ -445,6 +473,25 @@ function renderTable(){
     const eur=toEur(e.amount,e.currency,e.rate);
     const avg=get6MonthAvg(e.cat);
     const trend=avg?(eur>avg*1.1?'<span class="trend-up">↑</span>':eur<avg*0.9?'<span class="trend-down">↓</span>':''):'';
+    const isMobile=window.innerWidth<=768;
+    if(isMobile){
+      return `<div class="table-row" style="display:block;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+          <div>
+            <div style="font-weight:500;font-size:13px">${e.desc}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">${new Date(e.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})} · ${e.account}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:500;font-size:13px">${fmtLocal(e.amount,e.currency)}</div>
+            <div style="font-size:11px;color:var(--muted)">${e.currency!=='EUR'?fmtEur(eur):''}</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+          <span class="tag">${CAT_ICONS[getCatGroup(e.cat)]||''} ${e.cat}</span>
+          <button class="del-btn" onclick="deleteEntry('${e.id}')">✕</button>
+        </div>
+      </div>`;
+    }
     return `<div class="table-row">
       <span style="color:var(--muted);font-size:12px">${new Date(e.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})}</span>
       <span>${e.desc}</span>
